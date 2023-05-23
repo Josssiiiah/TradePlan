@@ -1,3 +1,4 @@
+import Error from "next/error";
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
@@ -5,7 +6,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function (req, res) {
+export default async function (req: any, res: any) {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -30,10 +31,13 @@ export default async function (req, res) {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: generatePrompt(input),
-      temperature: 0.6,
+      temperature: 1,
+      max_tokens: 400,
     });
-    res.status(200).json({ result: completion.data.choices[0].text });
-  } catch (error) {
+    if (completion.data.choices[0]) {
+      res.status(200).json({ result: completion.data.choices[0].text });
+    }
+  } catch (error: any) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
       console.error(error.response.status, error.response.data);
@@ -47,10 +51,23 @@ export default async function (req, res) {
       });
     }
   }
+  let prompt = generatePrompt(input);
+  console.log(prompt);
 }
 
-function generatePrompt(input) {
-  return `Generate a response for the following input:
+function generatePrompt(input: any) {
+  return `Generate a trade plan for the following input with a new line between each step:
 
-Input: ${input}`;
+  Input: AAPL calls over 174.50, puts under 173 
+  Response: 
+  AAPL Calls: 
+  1. Enter a long position in AAPL calls over 174.50 and set an initial stop loss order at 174. 
+  2. Place a profit target at 175 and adjust it depending on the price action. 
+  
+  AAPL Puts:
+  1. Enter a short position in AAPL puts under 173 and set an initial stop loss order at 173.50. 
+  2. Place a profit target at 172.50 and adjust it depending on the price action. 
+
+Input: ${input}
+Response:`;
 }
