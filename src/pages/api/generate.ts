@@ -61,12 +61,12 @@ function generatePrompt(input: any) {
   Input: AAPL calls over 174.50, puts under 173 
   Response: 
   AAPL Calls: 
-  1. Enter a long position in AAPL calls over 174.50 and set an initial stop loss order at 174. 
-  2. Place a profit target at 175 and adjust it depending on the price action. 
+  1. Enter AAPL calls over 174.50 and set stop loss at 174. 
+  2. Place profit target at 175 and adjust depending on price action. 
   
   AAPL Puts:
-  1. Enter a short position in AAPL puts under 173 and set an initial stop loss order at 173.50. 
-  2. Place a profit target at 172.50 and adjust it depending on the price action. 
+  1. Enter AAPL puts under 173 and set stop loss at 173.50. 
+  2. Place profit target at 172.50 and adjust depending on price action. 
 
 Input: ${input}
 Response:`;
